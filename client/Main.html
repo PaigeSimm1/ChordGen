@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chord Progression Generator</title>
+
+    <!-- Custom Stylesheet -->
+    <link rel="stylesheet" href="Stylesheet.css">
+
+    <!-- Font Awesome CDN -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+</head>
+
+<body>
+    <!--Page Header-->
+    <div class="container-fluid py-5 header-container">
+        <header class="site-header text-start">
+            <h1 class="page-title fw-bold 1h-1 ps-5">Chord Progression Generator</h1>
+        </header>
+    </div>
+
+    <div class="container page-content">
+        <form id="chord-form">
+            <div class="d-flex align-items-center justify-content-between flex-wrap gap-2">
+
+                <div class="d-flex align-items-center gap-2 flex-wrap page-buttons">
+
+                    <!-- BPM Input-->
+                    <input type="number" maxlength="3" value="100" class="form-control bpm-input text-center"
+                        id="bpm-control">
+
+                    <!-- Style Dropdown -->
+                    <div class="dropdown">
+                        <button class="style-button dropdown-toggle" id="Style-Select" data-bs-toggle="dropdown">Style</button>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="#" id="Style-Pop">Pop</a></li>
+                            <li><a class="dropdown-item" href="#" id="Style-Rock">Rock</a></li>
+                            <li><a class="dropdown-item" href="#" id="Style-Jazz">Jazz</a></li>
+                            <li><a class="dropdown-item" href="#" id="Style-Blues">Blues</a></li>
+                            <li><a class="dropdown-item" href="#" id="Style-Ballad">Ballad</a></li>
+                        </ul>
+                    </div>
+
+                    <!-- Scale Dropdown-->
+                    <div class="dropdown">
+                        <button class="scale-button dropdown-toggle" data-bs-toggle="dropdown">Scale</button>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="#" id="Scale-Major">Major</a></li>
+                            <li><a class="dropdown-item" href="#" id="Scale-NaturalMinor">Natural Minor</a></li>
+                            <li><a class="dropdown-item" href="#" id="Scale-HarmonicMinor">Harmonic Minor</a></li>
+                            <li><a class="dropdown-item" href="#" id="Scale-MelodicMinor">Melodic Minor</a></li>
+                            <li><a class="dropdown-item" href="#" id="Scale-WholeTone">Whole Tone</a></li>
+                            <li><a class="dropdown-item" href="#" id="Scale-Chromatic">Chromatic</a></li>
+                            <li><a class="dropdown-item" href="#" id="Scale-Diminished">Diminished</a></li>
+                        </ul>
+                    </div>
+
+                    <!-- Time Signature Dropdown-->
+                    <div class="dropdown">
+                        <button class="time-button dropdown-toggle" data-bs-toggle="dropdown">Time Signature</button>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="#" id="Time-4/4">4/4</a></li>
+                            <li><a class="dropdown-item" href="#" id="Time-3/4">3/4</a></li>
+                            <li><a class="dropdown-item" href="#" id="Time-2/4">2/4</a></li>
+                            <li><a class="dropdown-item" href="#" id="Time-6/8">6/8</a></li>
+                        </ul>
+                    </div>
+
+                    <!-- Generate Button-->
+                    <input type="submit" value="Create" id="generate-btn" class="generate-button">
+                </div>
+            </div>
+        </form>
+            </div>
+  <script src="button-control.js"></script>
+    <script src="submit-handler.js"></script>
+          
+
+    <!-- Chord Progression Tables-->
+    <div class="container tables-container">
+        <p class="fs-2">Common Chord Progressions</p>
+
+        <!-- Major Table -->
+        <div class="container table-content pt-2">
+            <p class="chord-tag mb-0">Major</p>
+            <table class="table about-table mt-0">
+                <tbody>
+                    <tr>
+                        <td>I</td>
+                        <td>V</td>
+                        <td>vi</td>
+                        <td>IV</td>
+                    </tr>
+                    <tr>
+                        <td>I</td>
+                        <td>IV</td>
+                        <td>V</td>
+                        <td>I</td>
+                    </tr>
+                    <tr>
+                        <td>I</td>
+                        <td>iii</td>
+                        <td>IV</td>
+                        <td>V</td>
+                    </tr>
+                    <tr>
+                        <td>ii</td>
+                        <td>V</td>
+                        <td>I</td>
+                        <td>vi</td>
+                    </tr>
+                    <tr>
+                        <td>I</td>
+                        <td>IV</td>
+                        <td>vi</td>
+                        <td>V</td>
+                    </tr>
+                    <tr>
+                        <td>I</td>
+                        <td>vi</td>
+                        <td>IV</td>
+                        <td>V</td>
+                    </tr>
+                    <tr>
+                        <td>I</td>
+                        <td>IV</td>
+                        <td>V</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>I</td>
+                        <td>vi</td>
+                        <td>ii</td>
+                        <td>V</td>
+                    </tr>
+                    <tr>
+                        <td>I</td>
+                        <td>IV</td>
+                        <td>ii</td>
+                        <td>V</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Minor Table -->
+        <div class="container table-content pt-2">
+            <p class="chord-tag mb-0">Minor</p>
+            <table class="table about-table mt-0">
+                <tbody>
+                    <tr>
+                        <td>i</td>
+                        <td>VI</td>
+                        <td>VII</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>i</td>
+                        <td>iv</td>
+                        <td>v</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>i</td>
+                        <td>VII</td>
+                        <td>VI</td>
+                        <td>VII</td>
+                    </tr>
+                    <tr>
+                        <td>i</td>
+                        <td>VI</td>
+                        <td>III</td>
+                        <td>VII</td>
+                    </tr>
+                    <tr>
+                        <td>VI</td>
+                        <td>VII</td>
+                        <td>i</td>
+                        <td>i</td>
+                    </tr>
+                    <tr>
+                        <td>i</td>
+                        <td>iv</td>
+                        <td>v</td>
+                        <td>i</td>
+                    </tr>
+                    <tr>
+                        <td>ii</td>
+                        <td>v</td>
+                        <td>i</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>i</td>
+                        <td>v</td>
+                        <td>VII</td>
+                        <td>iv</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+
+</html>

@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+    <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chord Progression Generator</title>
+
+    <!-- Custom Stylesheet -->
+    <link rel="stylesheet" href="Stylesheet.css">
+
+    <!-- Font Awesome CDN -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+
+        <style>
+            #loader {
+                position: absolute;
+                left: 50%;
+                top: 50%;
+                z-index: 1;
+                border: 16px solid #f3f3f3;
+                border-top: 16px solid #1fa0f1;
+                border-radius: 50%;
+                margin: 20px auto;
+                width: 150px;
+                height: 150px;
+                animation: spin 1s linear infinite;
+            }
+
+            @keyframes spin {
+                0% { transform: rotate(0deg); }
+                100% { transform: rotate(360deg); }
+            }
+        </style>
+</head>
+
+<body>
+        <!--Page Header-->
+    <div class="container-fluid py-5 header-container">
+        <header class="site-header text-start">
+            <h1 class="page-title fw-bold 1h-1 ps-5">Chord Progression Generator</h1>
+        </header>
+    </div>
+<div id="loader"></div>
+    <div class="container">
+    
+
+    <div id="generating-chord">Generating</div>
+    
+    </div>
+
+<script src="loading.js"></script>
+
+<script>
+    startGeneratingAnim();
+
+    const saved = JSON.parse(localStorage.getItem("pendingChordForm"));
+
+    let formData = new FormData();
+    formData.set('Style-Select', saved.style);
+    formData.set('scale-button', saved.scale);
+    formData.set('time-button', saved.time);
+    formData.set('bpm-control', saved.bpm);
+
+    fetch('http://127.0.0.1:3000', {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log(data);
+
+        localStorage.setItem("generatedChords", JSON.stringify(data.progression));
+
+        stopGeneratingAnim();
+
+        window.location.href = "Response.html";  // <-- FIXED syntax
+    })
+    .catch(err => {
+        console.error(err);
+        stopGeneratingAnim();
+    });
+</script>
+
+    
+</body>
+</html>

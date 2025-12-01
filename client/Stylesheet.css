@@ -1,0 +1,128 @@
+body {
+    background-color: #efefef;
+}
+
+.header-container {
+    background-color: #1fa0f1;
+    margin: 0;
+    padding: 0;
+}
+
+.page-title {
+    color: #ffffff;
+    font-weight: bold;
+    font-family: Arial, sans-serif;
+}
+
+div.page-buttons {
+    gap: 2vw;
+    padding: 2vh;
+    align-content: start;
+}
+
+div.special-buttons {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: .5rem;
+    margin-top: 0;
+}
+
+button.play-button,
+button.download-button,
+button.volume-button {
+    flex: 0 0 auto;
+    padding: 0.5rem;
+    cursor: pointer;
+    width: clamp(40px, 4vw, 50px);
+    height: clamp(40px, 4vw, 50px);
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background-color: #f8f8f8;
+    border: 0.15rem solid rgb(205, 205, 205);
+    border-radius: 0.5rem;
+    box-sizing: border-box;
+
+    text-align: center;
+}
+
+button.play-button:hover,
+button.download-button:hover,
+button.volume-button:hover {
+    background-color: rgb(236, 236, 236);
+    border-color: rgb(179, 179, 179);
+}
+
+.fa-play,
+.fa-pause,
+.fa-download,
+.fa-volume-up,
+.fa-volume-mute,
+.fa-stop,
+.fa-volume-xmark {
+    font-size: 1.2rem;
+    color: #3f3f3f;
+}
+
+input.bpm-input,
+input.generate-button {
+    background-color: #f8f8f8;
+    border: 0.15rem solid rgb(205, 205, 205);
+    border-radius: 0.5rem;
+    box-sizing: border-box;
+
+    font-size: clamp(1rem, 2vw, 1.25rem);
+    text-align: center;
+    color: #3f3f3f;
+    font-family: Arial;
+
+    width: clamp(100px, 5vw, 120px);
+    height: clamp(40px, 4vw, 50px);
+}
+
+button.style-button,
+button.scale-button,
+button.time-button {
+    height: clamp(40px, 4vw, 50px);
+    width: auto;
+    font-size: clamp(1rem, 2vw, 1.25rem);
+    text-align: center;
+    background-color: #f8f8f8;
+    border: 0.15rem solid rgb(205, 205, 205);
+    border-radius: 0.5rem;
+    box-sizing: border-box;
+
+    color: #3f3f3f;
+    font-family: Arial;
+}
+
+div.table-content {
+    background-color: #f7f7f7;
+    border-radius: 10px;
+}
+
+p.chord-tag {
+    font-size: clamp(1rem, 2vw, 1.25rem);
+    font-weight: bolder;
+    color: #696969;
+    font-family: Helvetica;
+}
+
+table.about-table tr {
+    border-bottom: 2px solid #e7e7e7;
+}
+
+table.about-table td,
+table.about-table th {
+    background-color: #f7f7f7;
+    font-family: Helvetica;
+    color: #4f4f4f;
+    font-weight: bold;
+}
+
+.table.about-table tr:last-child td {
+    border-bottom: 2px solid #f7f7f7;
+}
