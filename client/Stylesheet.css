@@ -126,3 +126,31 @@ table.about-table th {
 .table.about-table tr:last-child td {
     border-bottom: 2px solid #f7f7f7;
 }
+
+.chord-output {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    margin: 0 auto;
+    background-color: #bdbdbd;
+    padding: 12px;
+    max-width: 680px;
+    width: 100%; 
+    border: 2px solid #bdbdbd;
+    border-radius: 1rem;
+}
+
+.chord-tile {
+    background: #ffffff;
+    border-radius: 10px;
+    padding: 20px 35px;
+    font-size: 2rem;
+    font-weight: 500;
+    color: #444;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+    border: 2px solid #e5e5e5;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 120px;
+}

@@ -19,7 +19,7 @@ app.listen(port, hostname, () => {
 });
 
 const client = new OpenAI({
-    apiKey: "secret" //secret key from ChatGPT goes here in quotes
+    apiKey: "top-secret"
 });
 
 app.post(
@@ -31,9 +31,31 @@ app.post(
         const time = request.body["time-button"];
         const bpm = request.body["bpm-control"];
 
-        const aiPrompt = `
-Generate a chord progression for a ${style} song.
-It should be in the ${scale} scale, at ${bpm} BPM, and in ${time} time signature.
+const aiPrompt = `
+Generate a random chord progression for a ${style} song.
+
+Choose a RANDOM root note from:
+C, C#, D, Eb, E, F, F#, G, Ab, A, Bb, or B.
+
+Use that root to build a ${scale} scale
+(Example: If the root is F and scale = Major → F major scale).
+
+The progression must be at ${bpm} BPM and in ${time} time signature.
+
+Follow these harmonic rules:
+
+1. Generate ONLY 4 chords.
+2. Use ONLY diatonic chords from the chosen scale.
+3. AVOID diminished chords (replace them with another diatonic chord).
+4. ALWAYS end the progression on the tonic chord (I or i).
+5. Match the style genre (${style}) more closely:
+   - Pop/Rock: use mostly triads, 6/9, add9, maj7, m7. Avoid overly jazzy chords. Should be simple.
+   - Jazz: use 7th, maj7, m7, m9, 9, 11, 13 chords.
+   - Blues: dominant 7th chords are OK if scale allows.
+   - Ballad: softer chords like maj7, m7, add9.
+6. Prefer extended chords (maj7, m7, 9, 11, 6) when appropriate for the style.
+7. Keep the voicing simple enough for Midi playback.
+
 Return ONLY as JSON in this format:
 
 [
@@ -41,7 +63,7 @@ Return ONLY as JSON in this format:
   { "chord": "Am", "duration": "4n" }
 ]
 
-Do not include any text outside the JSON array.
+Do NOT include any text outside the JSON array.
 `;
 
         const chatGPTResponse = await client.responses.create({
