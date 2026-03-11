@@ -72,13 +72,12 @@
     .then(response => response.json())
     .then(data => {
         console.log(data);
-        console.log("Generated Chords: ", data.progression);
 
         localStorage.setItem("generatedChords", JSON.stringify(data.progression));
 
         stopGeneratingAnim();
 
-        window.location.href = "Response.html";
+        window.location.href = "Response.html";  // <-- FIXED syntax
     })
     .catch(err => {
         console.error(err);
