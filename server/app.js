@@ -5,6 +5,7 @@ import multer from "multer";
 import mysql from "mysql2/promise";
 import { body, validationResult } from "express-validator";
 import dotenv from "dotenv";
+import cors from "cors";
 
 // Path Finding
 import path from "node:path";
