@@ -1,35 +1,171 @@
-//Code libraries needed for this script to work
-// In order to install, use the following command on
-// the cmd terminal: npm install {library} 
-// {library} is the word after "from" in no quotes
-// e.g., from "openai" = npm install openai
 import OpenAI from "openai";
-import express from 'express';
-import multer from 'multer';
+import express from "express";
+import multer from "multer";
+import mysql from "mysql2/promise";
+import { body, validationResult } from "express-validator";
+import dotenv from "dotenv";
 
-// ~!~!~!~ DO NOT TOUCH ~!~!~!~
-// Default settings for the script; 
+dotenv.config();
+
 const app = express();
-const hostname = '127.0.0.1';
-const port = 3000;
-const upload = multer({ dest: 'uploads/' })
-app.listen(port, hostname, () => {
+const port = process.env.PORT || 3000;
+const upload = multer({ dest: "uploads/" });
 
-    console.log(`Server running at http://${hostname}:${port}/`);
+app.use(express.static("../client"));
+
+app.listen(port, "0.0.0.0", () => {
+    console.log(`Server running on port ${port}`);
 });
 
 const client = new OpenAI({
-    apiKey: "nice-try" //secret key from ChatGPT goes here in quotes
+    apiKey: process.env.OPENAI_API_KEY
+});
+
+let connection = null;
+
+export async function query(sql, params = []) {
+    if (connection === null) {
+        connection = await mysql.createConnection({
+            host: process.env.DB_HOST,
+            user: process.env.DB_USER,
+            password: process.env.DB_PASSWORD,
+            database: process.env.DB_NAME
+        });
+    }
+
+    const [results] = await connection.execute(sql, params);
+    return results;
+}
+
+const validateForm = [
+    body("bpm")
+        .notEmpty()
+        .isInt({ min: 40, max: 300 })
+        .withMessage("BPM must be between 40 and 300!"),
+
+    body("style")
+        .notEmpty().withMessage("Please select a style.")
+        .isIn(["Pop", "Rock", "Jazz", "Blues", "Ballad"])
+        .withMessage("Invalid style selected."),
+
+    body("scale")
+        .notEmpty().withMessage("Please select a scale.")
+        .isIn([
+            "Major",
+            "Natural Minor",
+            "Harmonic Minor",
+            "Melodic Minor",
+            "Whole Tone",
+            "Chromatic",
+            "Diminished"
+        ])
+        .withMessage("Invalid scale selected."),
+
+    body("time")
+        .notEmpty().withMessage("Please select a time signature.")
+        .isIn(["4/4", "3/4", "2/4", "6/8"])
+        .withMessage("Invalid time signature selected.")
+];
+
+app.get("/chord_gen/", async (request, response) => {
+    try {
+        let selectSql = `
+            SELECT
+                chords,
+                bpm,
+                scale,
+                style,
+                time_signature,
+                created_at
+            FROM chord_gen
+        `;
+
+        const whereStatements = [];
+        const queryParameters = [];
+
+        if (request.query.bpm) {
+            whereStatements.push("bpm = ?");
+            queryParameters.push(request.query.bpm);
+        }
+
+        if (request.query.scale) {
+            whereStatements.push("scale = ?");
+            queryParameters.push(request.query.scale);
+        }
+
+        if (request.query.style) {
+            whereStatements.push("style = ?");
+            queryParameters.push(request.query.style);
+        }
+
+        if (request.query.time_signature) {
+            whereStatements.push("time_signature = ?");
+            queryParameters.push(request.query.time_signature);
+        }
+
+        if (whereStatements.length > 0) {
+            selectSql += " WHERE " + whereStatements.join(" AND ");
+        }
+
+        const allowedSortColumns = [
+            "bpm",
+            "scale",
+            "style",
+            "time_signature",
+            "created_at"
+        ];
+
+        const allowedSortOrders = ["ASC", "DESC"];
+
+        if (allowedSortColumns.includes(request.query.sort_by)) {
+            const sortOrder = allowedSortOrders.includes(request.query.sort_order)
+                ? request.query.sort_order
+                : "ASC";
+
+            selectSql += ` ORDER BY ${request.query.sort_by} ${sortOrder}`;
+        }
+
+        let limit = parseInt(request.query.limit);
+
+        if (isNaN(limit) || limit < 1 || limit > 10) {
+            limit = 10;
+        }
+
+        if (!Number.isInteger(limit) || limit < 1 || limit > 10) {
+            limit = 10;
+        }
+
+        selectSql += ` LIMIT ${limit}`;
+
+        const result = await query(selectSql, queryParameters);
+
+        response.json({ data: result });
+
+    } catch (error) {
+        console.log(error);
+        response.status(500).json({
+            message: "Something went wrong with the server."
+        });
+    }
 });
 
 app.post(
-    '/',
+    "/",
     upload.none(),
+    validateForm,
     async (request, response) => {
-        const style = request.body["Style-Select"];
-        const scale = request.body["scale-button"];
-        const time = request.body["time-button"];
-        const bpm = request.body["bpm-control"];
+        const errors = validationResult(request);
+
+        if (!errors.isEmpty()) {
+            return response.status(400).json({
+                errors: errors.array()
+            });
+        }
+
+        const style = request.body.style;
+        const scale = request.body.scale;
+        const time = request.body.time;
+        const bpm = request.body.bpm;
 
         const aiPrompt = `
 Generate a chord progression for a ${style} song.
@@ -50,17 +186,34 @@ Do not include any text outside the JSON array.
         });
 
         let progression;
+
         try {
-            progression = JSON.parse(chatGPTResponse.output_text); // parse JSON from GPT
-        } catch (err) {
-            console.error("Failed to parse JSON:", err);
+            progression = JSON.parse(chatGPTResponse.output_text);
+        } catch (error) {
+            console.error("Failed to parse JSON:", error);
             progression = [];
         }
 
-        // Send the parsed array to the frontend
-        response.status(200)
-            .setHeader('Access-Control-Allow-Origin', '*')
-            .setHeader('Content-Type', 'application/json')
-            .json({ progression });
+        try {
+            await query(
+                `
+                INSERT INTO chord_gen
+                    (chords, style, scale, time_signature, bpm)
+                VALUES
+                    (?, ?, ?, ?, ?)
+                `,
+                [
+                    JSON.stringify(progression),
+                    style,
+                    scale,
+                    time,
+                    bpm
+                ]
+            );
+        } catch (dbError) {
+            console.error("Database insert error:", dbError);
+        }
+
+        response.status(200).json({ progression });
     }
 );

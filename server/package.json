@@ -1,7 +1,29 @@
 {
+  "name": "server",
+  "version": "1.0.0",
+  "description": "",
+  "homepage": "https://github.com/PaigeSimm1/ChordGen#readme",
+  "bugs": {
+    "url": "https://github.com/PaigeSimm1/ChordGen/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/PaigeSimm1/ChordGen.git"
+  },
+  "license": "ISC",
+  "author": "Paige Simmons",
+  "type": "module",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
   "dependencies": {
-    "express": "^5.1.0",
-    "multer": "^2.0.2",
-    "openai": "^6.8.1"
+    "cors": "^2.8.6",
+    "dotenv": "^17.4.2",
+    "express": "^5.2.1",
+    "express-validator": "^7.3.2",
+    "multer": "^2.3.0",
+    "mysql2": "^3.24.3",
+    "openai": "^6.49.0"
   }
 }

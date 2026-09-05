@@ -15,41 +15,38 @@ document.addEventListener("DOMContentLoaded", () => {
                 event.preventDefault();
 
                 // Update button text
-                dd_toggle.textContent = this.textContent.trim();
+                const selectedText = this.textContent.trim();
+                dd_toggle.textContent = selectedText;
+                dd_toggle.classList.remove("error-field");
 
                 // Store selected values based on which dropdown
                 if (dd_toggle.classList.contains("style-button")) {
-                    selectedStyle = this.textContent.trim();
-                } else if (dd_toggle.classList.contains("scale-button")) {
-                    selectedScale = this.textContent.trim();
-                } else if (dd_toggle.classList.contains("time-button")) {
-                    selectedTime = this.textContent.trim();
+                    selectedStyle = selectedText;
+                    document.getElementById("style-value").value = selectedStyle;
+                    document.getElementById("error-style").innerHTML = "";
+                }
+
+                else if (dd_toggle.classList.contains("scale-button")) {
+                    selectedScale = selectedText;
+                    document.getElementById("scale-value").value = selectedScale;
+                    document.getElementById("error-scale").innerHTML = "";
+                }
+
+                else if (dd_toggle.classList.contains("time-button")) {
+                    selectedTime = selectedText;
+                    document.getElementById("time-value").value = selectedTime;
+                    document.getElementById("error-time").innerHTML = "";
                 }
             });
         });
     });
+
+    const bpmInput = document.getElementById("bpm-control");
+    if (bpmInput) { // If it exists
+        bpmInput.addEventListener("input", () => {
+            bpmInput.classList.remove("error-field");
+            const bpmError = document.getElementById("error-bpm");
+            if (bpmError) bpmError.innerHTML = "";
+        })
+    }
 });
-
-// playButton.addEventListener("click", () => {
-//     if (!isPlaying) {
-//         playIcon.classList.remove("fa-play");
-//         playIcon.classList.add("fa-stop");
-//         isPlaying = true;
-//     } else {
-//         playIcon.classList.remove("fa-stop");
-//         playIcon.classList.add("fa-play");
-//         isPlaying = false;
-//     }
-// });
-
-// volumeButton.addEventListener("click", () => {
-//     if (!isMuted) {
-//         volumeIcon.classList.remove("fa-volume-high");
-//         volumeIcon.classList.add("fa-volume-xmark");
-//         isMuted = true;
-//     } else {
-//         volumeIcon.classList.remove("fa-volume-xmark");
-//         volumeIcon.classList.add("fa-volume-high");
-//         isMuted = false;
-//     }
-// });

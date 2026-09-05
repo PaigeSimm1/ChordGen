@@ -1,128 +1,256 @@
 body {
-    background-color: #efefef;
+    margin: 0;
+    background-color: #edf4ff;
+    color: #333333;
+    font-family: Arial, Helvetica, sans-serif;
 }
 
 .header-container {
     background-color: #1fa0f1;
-    margin: 0;
-    padding: 0;
+    border-bottom: 1px solid #1893de;
 }
 
 .page-title {
-    color: #ffffff;
-    font-weight: bold;
-    font-family: Arial, sans-serif;
+    color: white;
+    font-weight: bold;;
+}
+
+.page-content,
+.tables-container {
+    background-color: #ffffff;
+    border: 1px solid #d6d6d6;
+    border-radius: 10px;
+    margin-top: 2rem;
+    padding: 1.25rem;
 }
 
 div.page-buttons {
-    gap: 2vw;
-    padding: 2vh;
-    align-content: start;
+    gap: 0.75rem;
+    padding: 0.5rem 0;
+    align-items: flex-start;
 }
 
-div.special-buttons {
+.form-element {
     display: flex;
-    justify-content: flex-end;
-    align-items: center;
-    gap: .5rem;
-    margin-top: 0;
+    flex-direction: column;
+    gap: 0.35rem;
 }
 
-button.play-button,
-button.download-button,
-button.volume-button {
-    flex: 0 0 auto;
+button.play-button {
+    width: 46px;
+    height: 46px;
     padding: 0.5rem;
     cursor: pointer;
-    width: clamp(40px, 4vw, 50px);
-    height: clamp(40px, 4vw, 50px);
-
     display: flex;
     align-items: center;
     justify-content: center;
-
     background-color: #f8f8f8;
-    border: 0.15rem solid rgb(205, 205, 205);
-    border-radius: 0.5rem;
-    box-sizing: border-box;
-
-    text-align: center;
+    border: 1px solid #bcbcbc;
+    border-radius: 8px;
 }
 
-button.play-button:hover,
-button.download-button:hover,
-button.volume-button:hover {
-    background-color: rgb(236, 236, 236);
-    border-color: rgb(179, 179, 179);
+button.play-button:hover {
+    background-color: #efefef;
+    border-color: #9f9f9f;
 }
 
 .fa-play,
 .fa-pause,
-.fa-download,
-.fa-volume-up,
-.fa-volume-mute,
-.fa-stop,
-.fa-volume-xmark {
-    font-size: 1.2rem;
-    color: #3f3f3f;
+.fa-stop {
+    font-size: 1.1rem;
+    color: #333333;
 }
 
 input.bpm-input,
-input.generate-button {
-    background-color: #f8f8f8;
-    border: 0.15rem solid rgb(205, 205, 205);
-    border-radius: 0.5rem;
-    box-sizing: border-box;
-
-    font-size: clamp(1rem, 2vw, 1.25rem);
-    text-align: center;
-    color: #3f3f3f;
-    font-family: Arial;
-
-    width: clamp(100px, 5vw, 120px);
-    height: clamp(40px, 4vw, 50px);
-}
-
+input.generate-button,
 button.style-button,
 button.scale-button,
-button.time-button {
-    height: clamp(40px, 4vw, 50px);
-    width: auto;
-    font-size: clamp(1rem, 2vw, 1.25rem);
-    text-align: center;
+button.time-button,
+#search {
+    height: 46px;
+    min-width: 115px;
+    padding: 0 1rem;
     background-color: #f8f8f8;
-    border: 0.15rem solid rgb(205, 205, 205);
-    border-radius: 0.5rem;
-    box-sizing: border-box;
+    border: 1px solid #bcbcbc;
+    border-radius: 8px;
+    font-size: 1rem;
+    text-align: center;
+    color: #333333;
+    font-family: Arial, Helvetica, sans-serif;
+}
 
-    color: #3f3f3f;
-    font-family: Arial;
+input.bpm-input {
+    width: 115px;
+}
+
+input.generate-button {
+    background-color: #1fa0f1;
+    color: white;
+    border: 1px solid #1fa0f1;
+    font-weight: bold;
+}
+
+input.generate-button:hover {
+    background-color: #1688cf;
+    border-color: #1688cf;
+}
+
+button.style-button:hover,
+button.scale-button:hover,
+button.time-button:hover,
+#search:hover,
+input.bpm-input:hover {
+    background-color: #f0f0f0;
+    border-color: #9f9f9f;
+}
+
+#search {
+    background-color: #f4f4f4;
+    font-weight: 600;
+}
+
+.dropdown-menu {
+    border: 1px solid #cfcfcf;
+    border-radius: 8px;
+    padding: 0.35rem;
+}
+
+.dropdown-item {
+    border-radius: 6px;
+    padding: 0.6rem 0.75rem;
+    color: #333333;
+}
+
+.dropdown-item:hover {
+    background-color: #f1f1f1;
+    color: #333333;
 }
 
 div.table-content {
     background-color: #f7f7f7;
-    border-radius: 10px;
+    border-radius: 8px;
 }
 
 p.chord-tag {
-    font-size: clamp(1rem, 2vw, 1.25rem);
-    font-weight: bolder;
-    color: #696969;
-    font-family: Helvetica;
+    font-size: 1.05rem;
+    font-weight: bold;
+    color: #1fa0f1;
+    margin-top: 1rem;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.tables-container {
+    color: #333333;
+    font-weight: bold;
+    margin-bottom: 1rem;
+}
+
+table.about-table {
+    overflow: hidden;
+    border-radius: 8px;
+    margin-bottom: 1.5rem;
+    border: 1px solid #d6d6d6;
 }
 
 table.about-table tr {
-    border-bottom: 2px solid #e7e7e7;
+    border-bottom: 1px solid #e5e5e5;
 }
 
 table.about-table td,
 table.about-table th {
-    background-color: #f7f7f7;
-    font-family: Helvetica;
-    color: #4f4f4f;
-    font-weight: bold;
+    background-color: #fafafa;
+    color: #333333;
+    font-weight: 600;
+    padding: 0.8rem;
+    text-align: center;
+    font-family: Arial, Helvetica, sans-serif;
 }
 
 .table.about-table tr:last-child td {
-    border-bottom: 2px solid #f7f7f7;
+    border-bottom: none;
+}
+
+#errorBanner {
+    display: none;
+    width: 100%;
+    border-radius: 8px;
+    margin-bottom: 0.75rem;
+}
+
+#errorBanner.show {
+    display: block;
+}
+
+.error-slot {
+    min-height: 1.2rem;
+}
+
+.errorMessage {
+    color: #d9534f;
+    font-size: 0.9rem;
+    padding-left: 0.15rem;
+}
+
+.error-field {
+    border-color: #d9534f !important;
+}
+
+#progression-display {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-top: 1.25rem;
+}
+
+#progression-display .chord-box {
+    background-color: #f7f7f7;
+    border: 1px solid #d6d6d6;
+    border-radius: 8px;
+    padding: 0.9rem 1.1rem;
+    min-width: 100px;
+    text-align: center;
+    font-weight: bold;
+    color: #333333;
+}
+
+#progression-display .chord-box:hover {
+    border-color: #bcbcbc;
+}
+
+#generating-chord {
+    text-align: center;
+    font-size: 1.3rem;
+    font-weight: bold;
+    color: #444;
+    margin-top: 15rem;
+}
+
+@media (max-width: 768px) {
+    .page-title {
+        font-size: 1.8rem;
+        padding-left: 1.5rem !important;
+    }
+
+    .page-content,
+    .tables-container {
+        padding: 1rem;
+    }
+
+    div.page-buttons {
+        gap: 0.75rem;
+    }
+
+    input.bpm-input,
+    input.generate-button,
+    button.style-button,
+    button.scale-button,
+    button.time-button,
+    #search {
+        width: 100%;
+        min-width: 0;
+    }
+
+    .form-element {
+        width: 100%;
+    }
 }

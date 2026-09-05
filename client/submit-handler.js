@@ -1,16 +1,43 @@
-document.getElementById("chord-form").addEventListener("submit", function (event) {
-    event.preventDefault();
+document.addEventListener("DOMContentLoaded", () => {
+    const form = document.getElementById("chord-form");
 
-    let bpmValue = document.getElementById('bpm-control').value;
+    form.addEventListener("submit", async (event) => {
+        event.preventDefault();
 
-    let formObject = {
-        style: selectedStyle,
-        scale: selectedScale,
-        time: selectedTime,
-        bpm: bpmValue
-    };
+        clearErrors();
 
-    localStorage.setItem("pendingChordForm", JSON.stringify(formObject));
+        const formData = new FormData(form);
 
-    window.location.href = "Generating.html";
+        try {
+            const response = await fetch("http://localhost:3000", {
+                method: "POST",
+                body: formData
+            });
+
+            const data = await response.json();
+
+            if (!response.ok) {
+                if (response.status === 400 && data.errors) {
+                    showErrors(data.errors);
+                    return;
+                    
+                }
+
+                console.error("Server error:", data);
+                return;
+            }
+
+            localStorage.setItem("generatedChords", JSON.stringify(data.progression));
+            localStorage.setItem("pendingChordForm", JSON.stringify({
+                style: formData.get("style"),
+                scale: formData.get("scale"),
+                time: formData.get("time"),
+                bpm: formData.get("bpm")
+            }));
+
+            window.location.href = "generating.html";
+        } catch (error) {
+            console.error("Submit failed:", error);
+        }
+    });
 });

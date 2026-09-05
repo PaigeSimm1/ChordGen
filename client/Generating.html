@@ -60,12 +60,12 @@
     const saved = JSON.parse(localStorage.getItem("pendingChordForm"));
 
     let formData = new FormData();
-    formData.set('Style-Select', saved.style);
-    formData.set('scale-button', saved.scale);
-    formData.set('time-button', saved.time);
-    formData.set('bpm-control', saved.bpm);
+    formData.set('style', saved.style);
+    formData.set('scale', saved.scale);
+    formData.set('time', saved.time);
+    formData.set('bpm', saved.bpm);
 
-    fetch('http://127.0.0.1:3000', {
+    fetch('http://localhost:3000/chord_gen/', {
         method: 'POST',
         body: formData
     })
