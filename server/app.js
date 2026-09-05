@@ -4,17 +4,23 @@ import multer from "multer";
 import mysql from "mysql2/promise";
 import { body, validationResult } from "express-validator";
 import dotenv from "dotenv";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
 
-dotenv.config();
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+const publicDirectory = path.join(__dirname, "public");
+
+dotenv.config({ path: path.join(__dirname, ".env") });
 
 const app = express();
 const port = process.env.PORT || 3000;
 const upload = multer({ dest: "uploads/" });
 
-app.use(express.static("../client"));
+app.use(express.static(publicDirectory));
 
-app.listen(port, "0.0.0.0", () => {
-    console.log(`Server running on port ${port}`);
+app.get("/", (request, response) => {
+    response.sendFile(path.join(publicDirectory, "main.html"));
 });
 
 const client = new OpenAI({
@@ -217,3 +223,7 @@ Do not include any text outside the JSON array.
         response.status(200).json({ progression });
     }
 );
+
+app.listen(port, "0.0.0.0", () => {
+    console.log(`Server running on port ${port}`);
+});
