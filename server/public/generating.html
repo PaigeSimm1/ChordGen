@@ -65,7 +65,7 @@
     formData.set('time', saved.time);
     formData.set('bpm', saved.bpm);
 
-    fetch('http://localhost:3000/chord_gen/', {
+    fetch('/chord_gen/', {
         method: 'POST',
         body: formData
     })

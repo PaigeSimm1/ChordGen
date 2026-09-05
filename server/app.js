@@ -1,9 +1,12 @@
+// Imports
 import OpenAI from "openai";
 import express from "express";
 import multer from "multer";
 import mysql from "mysql2/promise";
 import { body, validationResult } from "express-validator";
 import dotenv from "dotenv";
+
+// Path Finding
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -13,12 +16,17 @@ const publicDirectory = path.join(__dirname, "public");
 
 dotenv.config({ path: path.join(__dirname, ".env") });
 
+// Defaults for script
 const app = express();
 const port = process.env.PORT || 3000;
 const upload = multer({ dest: "uploads/" });
 
+app.use(cors());
+
+// Stylesheet
 app.use(express.static(publicDirectory));
 
+// Webpage
 app.get("/", (request, response) => {
     response.sendFile(path.join(publicDirectory, "main.html"));
 });

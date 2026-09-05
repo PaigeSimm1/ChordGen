@@ -258,7 +258,7 @@
             const formData = new FormData(form);
 
             try {
-                const response = await fetch("http://localhost:3000", {
+                const response = await fetch("/", {
                     method: "POST",
                     body: formData
                 });
@@ -309,7 +309,7 @@
             console.log(getParameters.toString());
 
             try {
-                const response = await fetch("http://localhost:3000/chord_gen/?" + getParameters.toString(), {
+                const response = await fetch("/chord_gen/?" + getParameters.toString(), {
                     method: "GET"
                 });
 
