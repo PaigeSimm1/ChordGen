@@ -6,6 +6,7 @@ import mysql from "mysql2/promise";
 import { body, validationResult } from "express-validator";
 import dotenv from "dotenv";
 import cors from "cors";
+import { buildChordSearchQuery } from "./search-query.js";
 
 // Path Finding
 import path from "node:path";
@@ -36,19 +37,29 @@ const client = new OpenAI({
     apiKey: process.env.OPENAI_API_KEY
 });
 
-let connection = null;
+let pool = null;
 
-export async function query(sql, params = []) {
-    if (connection === null) {
-        connection = await mysql.createConnection({
+function getPool() {
+    if (pool === null) {
+        pool = mysql.createPool({
             host: process.env.DB_HOST,
+            port: Number(process.env.DB_PORT) || 3306,
             user: process.env.DB_USER,
             password: process.env.DB_PASSWORD,
-            database: process.env.DB_NAME
+            database: process.env.DB_NAME,
+            waitForConnections: true,
+            connectionLimit: 10,
+            queueLimit: 0,
+            enableKeepAlive: true,
+            keepAliveInitialDelay: 0
         });
     }
 
-    const [results] = await connection.execute(sql, params);
+    return pool;
+}
+
+export async function query(sql, params = []) {
+    const [results] = await getPool().execute(sql, params);
     return results;
 }
 
@@ -84,80 +95,13 @@ const validateForm = [
 
 app.get("/chord_gen/", async (request, response) => {
     try {
-        let selectSql = `
-            SELECT
-                chords,
-                bpm,
-                scale,
-                style,
-                time_signature,
-                created_at
-            FROM chord_gen
-        `;
-
-        const whereStatements = [];
-        const queryParameters = [];
-
-        if (request.query.bpm) {
-            whereStatements.push("bpm = ?");
-            queryParameters.push(request.query.bpm);
-        }
-
-        if (request.query.scale) {
-            whereStatements.push("scale = ?");
-            queryParameters.push(request.query.scale);
-        }
-
-        if (request.query.style) {
-            whereStatements.push("style = ?");
-            queryParameters.push(request.query.style);
-        }
-
-        if (request.query.time_signature) {
-            whereStatements.push("time_signature = ?");
-            queryParameters.push(request.query.time_signature);
-        }
-
-        if (whereStatements.length > 0) {
-            selectSql += " WHERE " + whereStatements.join(" AND ");
-        }
-
-        const allowedSortColumns = [
-            "bpm",
-            "scale",
-            "style",
-            "time_signature",
-            "created_at"
-        ];
-
-        const allowedSortOrders = ["ASC", "DESC"];
-
-        if (allowedSortColumns.includes(request.query.sort_by)) {
-            const sortOrder = allowedSortOrders.includes(request.query.sort_order)
-                ? request.query.sort_order
-                : "ASC";
-
-            selectSql += ` ORDER BY ${request.query.sort_by} ${sortOrder}`;
-        }
-
-        let limit = parseInt(request.query.limit);
-
-        if (isNaN(limit) || limit < 1 || limit > 10) {
-            limit = 10;
-        }
-
-        if (!Number.isInteger(limit) || limit < 1 || limit > 10) {
-            limit = 10;
-        }
-
-        selectSql += ` LIMIT ${limit}`;
-
-        const result = await query(selectSql, queryParameters);
+        const { sql, parameters } = buildChordSearchQuery(request.query);
+        const result = await query(sql, parameters);
 
         response.json({ data: result });
 
     } catch (error) {
-        console.log(error);
+        console.error("Chord search failed:", error);
         response.status(500).json({
             message: "Something went wrong with the server."
         });
