@@ -289,36 +289,14 @@
                 return;
             }
 
-            try {
-                const response = await fetch("/", {
-                    method: "POST",
-                    body: formData
-                });
+            localStorage.setItem("pendingChordForm", JSON.stringify({
+                style: formData.get("style"),
+                scale: formData.get("scale"),
+                time: formData.get("time"),
+                bpm: formData.get("bpm")
+            }));
 
-                const data = await response.json();
-
-                if (!response.ok) {
-                    if (response.status === 400 && data.errors) {
-                        showErrors(data.errors);
-                    }
-
-                    return;
-                }
-
-                localStorage.setItem("generatedChords", JSON.stringify(data.progression));
-
-                localStorage.setItem("pendingChordForm", JSON.stringify({
-                    style: formData.get("style"),
-                    scale: formData.get("scale"),
-                    time: formData.get("time"),
-                    bpm: formData.get("bpm")
-                }));
-
-                window.location.href = "generating.html";
-
-            } catch (error) {
-                console.error("Submit failed:", error);
-            }
+            window.location.href = "generating.html";
         });
 
         document.getElementById("search").addEventListener("click", async () => {

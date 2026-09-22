@@ -57,32 +57,50 @@
 <script>
     startGeneratingAnim();
 
-    const saved = JSON.parse(localStorage.getItem("pendingChordForm"));
+    async function generateChords() {
+        const savedForm = localStorage.getItem("pendingChordForm");
 
-    let formData = new FormData();
-    formData.set('style', saved.style);
-    formData.set('scale', saved.scale);
-    formData.set('time', saved.time);
-    formData.set('bpm', saved.bpm);
+        if (!savedForm) {
+            window.location.replace("/");
+            return;
+        }
 
-    fetch('/chord_gen/', {
-        method: 'POST',
-        body: formData
-    })
-    .then(response => response.json())
-    .then(data => {
-        console.log(data);
+        const saved = JSON.parse(savedForm);
+        const formData = new FormData();
+        formData.set("style", saved.style);
+        formData.set("scale", saved.scale);
+        formData.set("time", saved.time);
+        formData.set("bpm", saved.bpm);
 
-        localStorage.setItem("generatedChords", JSON.stringify(data.progression));
+        try {
+            const response = await fetch("/", {
+                method: "POST",
+                body: formData
+            });
 
-        stopGeneratingAnim();
+            const contentType = response.headers.get("content-type") || "";
+            const data = contentType.includes("application/json")
+                ? await response.json()
+                : null;
 
-        window.location.href = "Response.html";  // <-- FIXED syntax
-    })
-    .catch(err => {
-        console.error(err);
-        stopGeneratingAnim();
-    });
+            if (!response.ok) {
+                const message = data?.errors?.map(error => error.msg).join(" ")
+                    || data?.message
+                    || `Generation failed with status ${response.status}.`;
+                throw new Error(message);
+            }
+
+            localStorage.setItem("generatedChords", JSON.stringify(data.progression));
+            localStorage.removeItem("pendingChordForm");
+            window.location.href = "response.html";
+        } catch (error) {
+            console.error("Generation failed:", error);
+            stopGeneratingAnim();
+            document.getElementById("generating-chord").textContent = error.message;
+        }
+    }
+
+    generateChords();
 </script>
 
     
