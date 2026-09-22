@@ -208,6 +208,32 @@
             document.querySelectorAll(".error-field").forEach(field => field.classList.remove("error-field"));
         }
 
+        function validateCreateForm(formData) {
+            const errors = [];
+            const bpm = Number(formData.get("bpm"));
+            const style = formData.get("style");
+            const scale = formData.get("scale");
+            const time = formData.get("time");
+
+            if (!Number.isInteger(bpm) || bpm < 40 || bpm > 300) {
+                errors.push({ path: "bpm", msg: "BPM must be between 40 and 300!" });
+            }
+
+            if (!["Pop", "Rock", "Jazz", "Blues", "Ballad"].includes(style)) {
+                errors.push({ path: "style", msg: "Please select a style." });
+            }
+
+            if (!["Major", "Natural Minor", "Harmonic Minor", "Melodic Minor", "Whole Tone", "Chromatic", "Diminished"].includes(scale)) {
+                errors.push({ path: "scale", msg: "Please select a scale." });
+            }
+
+            if (!["4/4", "3/4", "2/4", "6/8"].includes(time)) {
+                errors.push({ path: "time", msg: "Please select a time signature." });
+            }
+
+            return errors;
+        }
+
         document.addEventListener("DOMContentLoaded", () => {
             const dropdowns = document.querySelectorAll(".dropdown");
 
@@ -256,6 +282,12 @@
 
             const form = event.target;
             const formData = new FormData(form);
+            const errors = validateCreateForm(formData);
+
+            if (errors.length > 0) {
+                showErrors(errors);
+                return;
+            }
 
             try {
                 const response = await fetch("/", {

@@ -33,6 +33,10 @@ app.get("/", (request, response) => {
     response.sendFile(path.join(publicDirectory, "main.html"));
 });
 
+app.get("/favicon.ico", (request, response) => {
+    response.status(204).end();
+});
+
 const client = new OpenAI({
     apiKey: process.env.OPENAI_API_KEY
 });
